@@ -1,0 +1,18 @@
+Import data from mysql directly creating static partition based on city=chennai
+
+
+sqoop import \
+--connect jdbc:mysql://localhost/custdb \
+--username root -P \
+--query "select custid,firstname,age from customer where city ='chennai' and \$CONDITIONS" \
+--target-dir /user/hduser/hiveext/ \
+--delete-target-dir \
+--split-by custid \
+--hive-overwrite \
+--hive-import \
+--create-hive-table \
+--hive-partition-key city \
+--hive-partition-value 'chennai' \
+--fields-terminated-by ',' \
+--hive-table usecase.custrec \
+--direct
