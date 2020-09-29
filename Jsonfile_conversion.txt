@@ -1,0 +1,23 @@
+convert a normal table to json file using serde
+
+1 >> download the JAR hive-hcatalog-core-1.2.1.jar
+
+2 >> copy the jar file to hive libiry
+
+    cp -p /home/hduser/hive-hcatalog-core-1.2.1.jar /usr/local/hive/lib/
+	
+3 >> add the jar file in hive
+
+    add jar /home/hduser/hive-hcatalog-core-1.2.1.jar;
+	
+4 >> create a external table
+
+create external table cust_parsed_json(id int, name string,city string, age int)
+ROW FORMAT SERDE 'org.apache.hive.hcatalog.data.JsonSerDe'
+stored as textfile
+location '/user/hduser/custjson';
+
+5 >> insert record into external table(cust_parsed_json) from managed table (custinfo) 
+
+insert into table cust_parsed_json
+select id,name,location,age from custinfo where NOT location="chennai";	
